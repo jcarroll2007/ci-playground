@@ -19,11 +19,16 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn build
   test:
     working_directory: ~/app
     docker:
       - image: circleci/node:8.10
     steps:
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn install
       - checkout
       - run: yarn test
 
