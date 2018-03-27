@@ -64,12 +64,12 @@ jobs:
 workflows:
   version: 2
 
-    checkout_build:
-      jobs:
-        - checkout_code
-        - build:
-            requires:
-              - checkout_code
+  checkout_build:
+    jobs:
+      - checkout_code
+      - build:
+          requires:
+            - checkout_code
 
   # build_and_test:
   #   jobs:
