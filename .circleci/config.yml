@@ -80,7 +80,7 @@ workflows:
   checkout_build:
     jobs:
       - checkout_code
-      - build:
+      - install_dependencies:
           requires:
             - checkout_code
 
