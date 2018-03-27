@@ -31,7 +31,7 @@ jobs:
   build:
     <<: *container_config
     steps:
-      - checkout
+      - *restore_repo
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "yarn.lock" }}
