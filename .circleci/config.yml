@@ -67,6 +67,12 @@ jobs:
       - *restore_repo
       - *restore_dependencies
       - run: yarn build
+      - run:
+          name: Move build to workspace
+          command: |
+            set -exu
+            mkdir -p /tmp/workspace/build
+            mv ./build /tmp/workspace/build/
       - persist_to_workspace:
           root: *workspace_root
           paths:
@@ -87,6 +93,12 @@ jobs:
       - *restore_repo
       - *restore_dependencies
       - *attach_workspace
+      - run:
+          name: Restore build from workspace
+          command: |
+            set -exu
+            mkdir -p ./build/
+            mv /tmp/workspace/build/* ./build/
       - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 
 
