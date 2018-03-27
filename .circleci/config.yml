@@ -6,6 +6,7 @@ version: 2
 jobs:
 
   build:
+    working_directory: ~/app
     docker:
       - image: circleci/node:8.10
     steps:
@@ -19,6 +20,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   test:
+    working_directory: ~/app
     docker:
       - image: circleci/node:8.10
     steps:
