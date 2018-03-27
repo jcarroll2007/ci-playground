@@ -99,28 +99,8 @@ jobs:
             set -exu
             mkdir -p ./build/
             mv /tmp/workspace/build/* ./build/
+            ls build/
       - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
-
-
-  # test:
-  #   <<: *container_config
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #         - v1-dependencies-{{ checksum "yarn.lock" }}
-  #     - run: yarn install
-  #     - checkout
-  #     - run: yarn test
-
-  # deploy:
-  #   docker:
-  #     - image: node:8.10
-  #   working_directory:  /tmp/app
-  #   steps:
-  #     - run:
-  #         name: Deploy Mater to Firebase
-  #         command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 
 workflows:
   version: 2
