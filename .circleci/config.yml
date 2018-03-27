@@ -9,6 +9,13 @@ references:
       - image: node:8.10
     working_directory: ~/app
 
+  workspace_root: &workspace_root
+    /tmp/workspace_root
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
   dependencies_cache_key: &dependencies_cache_key
     v1-dependencies-{{ checksum "yarn.lock" }}
   dependencies_backup_cache_key: &dependencies_backup_cache_key
@@ -60,6 +67,11 @@ jobs:
       - *restore_repo
       - *restore_dependencies
       - run: yarn build
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - build/
+
       ## save cache for this commit
 
   test:
@@ -74,6 +86,7 @@ jobs:
     steps:
       - *restore_repo
       - *restore_dependencies
+      - *attach_workspace
       - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 
 
