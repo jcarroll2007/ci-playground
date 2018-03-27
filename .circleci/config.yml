@@ -123,6 +123,7 @@ workflows:
           type: approval
           requires:
            - test
+           - build
       - deploy:
           requires:
             - hold
