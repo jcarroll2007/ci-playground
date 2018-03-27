@@ -54,6 +54,23 @@ jobs:
           paths:
             - ~/app/node_modules
 
+  build:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_dependencies
+      - run: yarn build
+      ## save cache for this commit
+
+  test:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_dependencies
+      - run: yarn test
+      ## save cache for this commit
+
+
   # test:
   #   <<: *container_config
   #   steps:
@@ -77,11 +94,19 @@ jobs:
 workflows:
   version: 2
 
-  checkout_build:
+  deploy:
     jobs:
       - checkout_code
       - install_dependencies:
           requires:
+            - checkout_code
+      - build:
+          requires:
+            - install_dependencies
+            - checkout_code
+      - test:
+          requires:
+            - install_dependencies
             - checkout_code
 
   # build_and_test:
