@@ -119,28 +119,10 @@ workflows:
           requires:
             - install_dependencies
             - checkout_code
+      - hold:
+          type: approval
+          requires:
+           - test
       - deploy:
           requires:
-            - install_dependencies
-            - checkout_code
-            - build
-            - test
-
-  # build_and_test:
-  #   jobs:
-  #     - build
-  #     - test:
-  #         requires:
-  #           - build
-
-  # -deploy:
-  #   jobs:
-  #     - build
-  #     - deploy:
-  #         requires:
-  #           - build
-  #         filters:
-  #           branches:
-  #             only: master
-
-
+            - hold
