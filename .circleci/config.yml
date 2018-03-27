@@ -42,8 +42,8 @@ jobs:
     working_directory:  /tmp/app
     steps:
       - run:
-        name: Deploy Mater to Firebase
-        command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+          name: Deploy Mater to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 
 workflows:
   version: 2
