@@ -38,7 +38,7 @@ jobs:
 
   deploy:
     docker:
-      - image: mpde:8.10
+      - image: node:8.10
     working_directory:  /tmp/app
     steps:
       - run:
