@@ -10,7 +10,7 @@ references:
     working_directory: ~/app
 
   workspace_root: &workspace_root
-    /tmp/workspace_root
+    /tmp/workspace
 
   attach_workspace: &attach_workspace
     attach_workspace:
