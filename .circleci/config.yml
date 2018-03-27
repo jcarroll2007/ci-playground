@@ -24,9 +24,9 @@ jobs:
       - *restore_repo
       - checkout
       - save_cache:
-        key: v1-repo-{{ .Branch }}-{{ .Revision }}
-        paths:
-          - .
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - .
 
   build:
     <<: *container_config
@@ -41,6 +41,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run: yarn build
+
   test:
     <<: *container_config
     steps:
