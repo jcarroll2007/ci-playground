@@ -11,7 +11,7 @@ references:
 
   repo_cach_key: &repo_cach_key
     v1-repo-{{ .Branch }}-{{ .Revision }}
-  repo_backup_cache_key
+  repo_backup_cache_key: &repo_backup_cache_key
     v1-repo
 
   restore_repo: &restore_repo
