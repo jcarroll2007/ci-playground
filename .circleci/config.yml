@@ -122,17 +122,22 @@ jobs:
       - run:
           name: Deploy to firebase and update github deployment status
           command: |
+            deployment_id=$( node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH )
             if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ]
             then
-              deployment_url=$( cat /tmp/workspace/deployment/info.json | python -c "import sys, json; print json.load(sys.stdin)['url']" )
-              curl -H "Authorization: token $GITHUB_TOKEN" \
-                   -d '{"state": "success", "target_url": "https://jcarroll-ci-playground.firebaseapp.com/", "description": "Deployment was successful" }' \
-                   $deployment_url/statuses
+              node ./.scripts/github/update_deployment_status.js \
+                --token $GITHUB_TOKEN \
+                --deployment $deployment_id \
+                --state success \
+                --target_url https://jcarroll-ci-playground.firebaseapp.com \
+                --description "Deployment was successful"
             else
-              deployment_url=$( cat /tmp/workspace/deployment/info.json | python -c "import sys, json; print json.load(sys.stdin)['url']" )
-              curl -H "Authorization: token $GITHUB_TOKEN" \
-                   -d '{"state": "failure", "target_url": "https://jcarroll-ci-playground.firebaseapp.com/", "description": "Deployment failed" }' \
-                   $deployment_url/statuses
+              node ./.scripts/github/update_deployment_status.js \
+                --token $GITHUB_TOKEN \
+                --deployment $deployment_id \
+                --state failure \
+                --target_url https://jcarroll-ci-playground.firebaseapp.com \
+                --description "Deployment was successful"
             fi
 
   run_node_script:
@@ -155,38 +160,37 @@ jobs:
 workflows:
   version: 2
 
+  # deploy:
+  #   jobs:
+  #     - checkout_code
+  #     - install_dependencies:
+  #         requires:
+  #           - checkout_code
+  #     - run_node_script:
+  #         requires:
+  #           - install_dependencies
+
   deploy:
     jobs:
       - checkout_code
       - install_dependencies:
           requires:
             - checkout_code
-      - run_node_script:
+      - build:
           requires:
             - install_dependencies
-
-  # deploy:
-  #   jobs:
-  #     - github_deployment_create
-  #     - checkout_code
-  #     - install_dependencies:
-  #         requires:
-  #           - checkout_code
-  #     - build:
-  #         requires:
-  #           - install_dependencies
-  #           - checkout_code
-  #     - test:
-  #         requires:
-  #           - install_dependencies
-  #           - checkout_code
-  #     - hold:
-  #         type: approval
-  #         requires:
-  #          - github_deployment_create
-  #          - test
-  #          - build
-  #     - github_deployment_create
-  #     - deploy:
-  #         requires:
-  #           - hold
+            - checkout_code
+      - test:
+          requires:
+            - install_dependencies
+            - checkout_code
+      # - hold:
+      #     type: approval
+      #     requires:
+      #      - test
+      #      - build
+      - deploy:
+          requires:
+            # - hold
+            - test
+            - build

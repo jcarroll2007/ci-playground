@@ -4,7 +4,7 @@ const args = require('./../../node_modules/args')
 args
   .option('token', 'The Github authorization token.')
   .option('deployment', 'The deployment id to be updated')
-  .option('state', 'The state of the deployment. ["error", "failure", "inactive", "pending", "success"]', "success")
+  .option('state', 'The state of the deployment. ["error", "failure", "inactive", "pending", "success"]')
   .option('target_url', 'The url for the deployment.')
   .option('description', 'The deployment status description.', 'Deployment status updated.')
 
@@ -35,7 +35,6 @@ fetch(`https://api.github.com/repos/jcarroll2007/ci-playground/deployments/${opt
     description: options.description
   })
 })
-  // .then(response =>)
   .then(res => {
     if (res.status >= 400 && res.status < 600) {
       throw new Error(res.statusText)
