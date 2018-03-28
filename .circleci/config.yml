@@ -56,7 +56,7 @@ jobs:
       - run:
           name: Create pending deployment on github.
           command: |
-            curl -H "Authorization: token $GITHUB_TOKEN" "Content-Type: application/json" -d "{'ref': $CIRCLE_BRANCH, 'required_contexts':[], 'description': 'Creating deployment.' }" https://api.github.com/repos/jcarroll2007/ci-playground/deployments
+            curl -H "Authorization: token $GITHUB_TOKEN" "Content-Type: application/json" -d "{'ref': '$CIRCLE_BRANCH', 'required_contexts':[], 'description': 'Creating deployment.' }" https://api.github.com/repos/jcarroll2007/ci-playground/deployments
 
   install_dependencies:
     <<: *container_config
