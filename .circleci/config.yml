@@ -109,6 +109,7 @@ jobs:
     steps:
       # is restoring the repo necessary? I don't think so
       # TODO: retore only firebase tools
+      - *restore_repo
       - *restore_dependencies
       - *attach_workspace
       - run:
