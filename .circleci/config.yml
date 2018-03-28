@@ -135,30 +135,41 @@ jobs:
                    $deployment_url/statuses
             fi
 
+  run_node_script:
+    <<: *container_config
+    steps:
+      - run: node ./.scripts/github/create_deployment.js
+
+
 workflows:
   version: 2
 
   deploy:
     jobs:
-      - github_deployment_create
-      - checkout_code
-      - install_dependencies:
-          requires:
-            - checkout_code
-      - build:
-          requires:
-            - install_dependencies
-            - checkout_code
-      - test:
-          requires:
-            - install_dependencies
-            - checkout_code
-      - hold:
-          type: approval
-          requires:
-           - github_deployment_create
-           - test
-           - build
-      - deploy:
-          requires:
-            - hold
+      - run_node_script
+
+  # deploy:
+  #   jobs:
+  #     - github_deployment_create
+  #     - checkout_code
+  #     - install_dependencies:
+  #         requires:
+  #           - checkout_code
+  #     - build:
+  #         requires:
+  #           - install_dependencies
+  #           - checkout_code
+  #     - test:
+  #         requires:
+  #           - install_dependencies
+  #           - checkout_code
+  #     - hold:
+  #         type: approval
+  #         requires:
+  #          - github_deployment_create
+  #          - test
+  #          - build
+  #     - github_deployment_create
+  #     - deploy:
+  #         requires:
+  #           - hold
