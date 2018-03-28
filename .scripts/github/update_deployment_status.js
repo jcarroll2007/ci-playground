@@ -11,7 +11,6 @@ args
   .option('repo', 'The Github repo is required.')
 
 const options = args.parse(process.argv)
-console.log(options)
 
 if (!options.token) {
   throw new Error('The authorization token must be passed in.')
