@@ -87,7 +87,7 @@ jobs:
       - *restore_dependencies
       - run: yarn test
 
-  github_deployment_create:
+  github_deployment_create: # add destroying of old deployment here
     <<: *container_config
     steps:
       - run: mkdir -p /tmp/workspace/deployment && touch /tmp/workspace/deployment/info.json
@@ -127,7 +127,10 @@ jobs:
                    -d '{"state": "success", "target_url": "https://jcarroll-ci-playground.firebaseapp.com/", "description": "Deployment was successful" }' \
                    $deployment_url/statuses
             else
-              cat /tmp/workspace/deployment/info.json | python -c "import sys, json; print json.load(sys.stdin)['url']"
+              deployment_url=$( cat /tmp/workspace/deployment/info.json | python -c "import sys, json; print json.load(sys.stdin)['url']" )
+              curl -H "Authorization: token $GITHUB_TOKEN" \
+                   -d '{"state": "failure", "target_url": "https://jcarroll-ci-playground.firebaseapp.com/", "description": "Deployment failed" }' \
+                   $deployment_url/statuses
             fi
 
 workflows:
