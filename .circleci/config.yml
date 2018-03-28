@@ -122,7 +122,8 @@ jobs:
       - run:
           name: Deploy to firebase and update github deployment status
           command: |
-            if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ] ; then
+            if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ]
+            then
               deployment_url=$( cat /tmp/workspace/deployment/info.json | python -c "import sys, json; print json.load(sys.stdin)['url']" )
               curl -H "Authorization: token $GITHUB_TOKEN" \
                    -d '{"state": "success", "target_url": "https://jcarroll-ci-playground.firebaseapp.com/", "description": "Deployment was successful" }' \
