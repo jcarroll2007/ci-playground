@@ -146,6 +146,7 @@ jobs:
                 --description "Deployment failed." \
                 --owner $CIRCLE_PROJECT_USERNAME \
                 --repo $CIRCLE_PROJECT_REPONAME
+              exit 1
             fi
 
 workflows:
