@@ -90,12 +90,15 @@ jobs:
   github_deployment_create:
     <<: *container_config
     steps:
+      - run: mkdir /tmp/workspace/deployment && touch /tmp/workspace/deployment/info.json
       - run:
           name: Create pending deployment on github.
           command: |
             curl -H "Authorization: token $GITHUB_TOKEN" \
                  -d '{"ref": "'"$CIRCLE_BRANCH"'", "required_contexts":[], "description": "Creating deployment." }' \
-                 https://api.github.com/repos/jcarroll2007/ci-playground/deployments
+                 https://api.github.com/repos/jcarroll2007/ci-playground/deployments \
+                 -o /tmp/workspace/deployment/info.json
+  # save the url from the response, then cache that in a file so it can be accessed later? then access it and use it to update the status when deploy is successful
 
   deploy:
     <<: *container_config
