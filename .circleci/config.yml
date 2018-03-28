@@ -115,6 +115,7 @@ workflows:
 
   deploy:
     jobs:
+      - github_deployment_create
       - checkout_code
       - install_dependencies:
           requires:
