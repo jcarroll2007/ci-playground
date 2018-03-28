@@ -7,6 +7,8 @@ args
   .option('state', 'The state of the deployment. ["error", "failure", "inactive", "pending", "success"]')
   .option('target_url', 'The url for the deployment.')
   .option('description', 'The deployment status description.', 'Deployment status updated.')
+  .option('owner', 'The Github repo owner is required.')
+  .option('repo', 'The Github repo is required.')
 
 const options = args.parse(process.argv)
 console.log(options)
@@ -23,8 +25,14 @@ if (!options.state) {
 if (!options.targetUrl) {
   throw new Error('The target is required.')
 }
+if (!options.owner) {
+  throw new Error('The github repo owner is required.')
+}
+if (!options.repo) {
+  throw new Error('The github repo is required.')
+}
 
-fetch(`https://api.github.com/repos/jcarroll2007/ci-playground/deployments/${options.deployment}/statuses`, {
+fetch(`https://api.github.com/repos/${options.owner}/${options.repo}/deployments/${options.deployment}/statuses`, {
   headers: {
     Authorization: `token ${options.token}`
   },

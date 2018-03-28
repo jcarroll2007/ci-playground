@@ -134,14 +134,18 @@ jobs:
                 --deployment $deployment_id \
                 --state success \
                 --target_url https://jcarroll-ci-playground.firebaseapp.com \
-                --description "Deployment was successful"
+                --description "Deployment was successful" \
+                --owner $CIRCLE_PROJECT_USERNAME \
+                --repo $CIRCLE_PROJECT_REPONAME
             else
               node ./.scripts/github/update_deployment_status.js \
                 --token $GITHUB_TOKEN \
                 --deployment $deployment_id \
                 --state failure \
                 --target_url $CIRCLE_BUILD_URL \
-                --description "Deployment failed."
+                --description "Deployment failed." \
+                --owner $CIRCLE_PROJECT_USERNAME \
+                --repo $CIRCLE_PROJECT_REPONAME
             fi
 
 workflows:

@@ -15,6 +15,12 @@ if (!options.token) {
 if (!options.branch) {
   throw new Error('The branch targetted for deployment is required.')
 }
+if (!options.owner) {
+  throw new Error('The github repo owner is required.')
+}
+if (!options.repo) {
+  throw new Error('The github repo is required.')
+}
 
 fetch(`https://api.github.com/repos/${options.owner}/${options.repo}/deployments`, {
   headers: {
