@@ -138,6 +138,7 @@ jobs:
   run_node_script:
     <<: *container_config
     steps:
+      - *restore_repo
       - run: node ./.scripts/github/create_deployment.js
 
 
@@ -146,6 +147,7 @@ workflows:
 
   deploy:
     jobs:
+      - checkout_code
       - run_node_script
 
   # deploy:
