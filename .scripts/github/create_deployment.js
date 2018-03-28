@@ -4,6 +4,8 @@ const args = require('./../../node_modules/args')
 args
   .option('branch', 'The current branch that is being deployed.')
   .option('token', 'The Github authorization token.')
+  .option('owner', 'The Github repo owner is required.')
+  .option('repo', 'The Github repo is required.')
 
 const options = args.parse(process.argv)
 
@@ -14,7 +16,7 @@ if (!options.branch) {
   throw new Error('The branch targetted for deployment is required.')
 }
 
-fetch('https://api.github.com/repos/jcarroll2007/ci-playground/deployments', {
+fetch(`https://api.github.com/repos/${options.owner}/${options.repo}/deployments`, {
   headers: {
     Authorization: `token ${options.token}`
   },
