@@ -118,6 +118,7 @@ jobs:
                 --description "Deployment was successful" \
                 --owner $CIRCLE_PROJECT_USERNAME \
                 --repo $CIRCLE_PROJECT_REPONAME
+              exit 0
             else
               node ./.scripts/github/update_deployment_status.js \
                 --token $GITHUB_TOKEN \
