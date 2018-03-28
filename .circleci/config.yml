@@ -110,12 +110,14 @@ jobs:
             mkdir -p ./build/
             mv /tmp/workspace/build/* ./build/
             ls build/
-      - run: |
-        if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ] ; then
-          echo "Success"
-        else
-          echo "Failure"
-        fi
+      - run:
+          name: Deploy to firebase and update github deployment status
+          command: |
+            if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ] ; then
+              echo "Success"
+            else
+              echo "Failure"
+            fi
 
 workflows:
   version: 2
