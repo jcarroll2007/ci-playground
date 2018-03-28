@@ -140,7 +140,9 @@ jobs:
     steps:
       - *restore_repo
       - *restore_dependencies
-      - run: node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH
+      - run: |
+        deployment_id=$( node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH )
+        echo $deployment_id
 
 
 workflows:

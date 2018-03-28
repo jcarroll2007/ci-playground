@@ -35,6 +35,6 @@ fetch('https://api.github.com/repos/jcarroll2007/ci-playground/deployments', {
     }
   })
   .then(json => {
-    console.log(json.url)
+    process.stdout.write(String(json.id))
   })
   .catch(err => console.log(err));
