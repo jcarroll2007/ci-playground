@@ -139,6 +139,7 @@ jobs:
     <<: *container_config
     steps:
       - *restore_repo
+      - *restore_dependencies
       - run: node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH
 
 
@@ -148,9 +149,12 @@ workflows:
   deploy:
     jobs:
       - checkout_code
-      - run_node_script:
+      - install_dependencies:
           requires:
             - checkout_code
+      - run_node_script:
+          requires:
+            - install_dependencies
 
   # deploy:
   #   jobs:
