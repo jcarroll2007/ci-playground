@@ -149,6 +149,8 @@ workflows:
     jobs:
       - checkout_code
       - run_node_script
+          requires:
+            - checkout_code
 
   # deploy:
   #   jobs:
