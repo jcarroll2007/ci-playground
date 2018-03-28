@@ -127,7 +127,7 @@ jobs:
               -b $CIRCLE_BRANCH \
               --owner $CIRCLE_PROJECT_USERNAME \
               --repo $CIRCLE_PROJECT_REPONAME)
-            if ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ;
+            if false ;
             then
               node ./.scripts/github/update_deployment_status.js \
                 --token $GITHUB_TOKEN \
