@@ -107,7 +107,8 @@ jobs:
   deploy:
     <<: *container_config
     steps:
-      - *restore_repo
+      # is restoring the repo necessary? I don't think so
+      # TODO: retore only firebase tools
       - *restore_dependencies
       - *attach_workspace
       - run:
