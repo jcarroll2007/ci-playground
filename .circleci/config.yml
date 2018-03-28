@@ -123,7 +123,7 @@ jobs:
           name: Deploy to firebase and update github deployment status
           command: |
             deployment_id=$( node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH )
-            if [ ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ]
+            if ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ;
             then
               node ./.scripts/github/update_deployment_status.js \
                 --token $GITHUB_TOKEN \
@@ -140,23 +140,7 @@ jobs:
                 --description "Deployment failed."
             fi
 
-  run_node_script:
-    <<: *container_config
-    steps:
-      - *restore_repo
-      - *restore_dependencies
-      - run:
           name: Deploy
-          command: |
-            deployment_id=$( node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH )
-            echo $deployment_id
-            node ./.scripts/github/update_deployment_status.js \
-              --token $GITHUB_TOKEN \
-              --deployment $deployment_id \
-              --state success \
-              --target_url https://jcarroll-ci-playground.firebaseapp.com \
-              --description "Deployment was successful"
-
 workflows:
   version: 2
 
