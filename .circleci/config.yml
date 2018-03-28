@@ -78,31 +78,12 @@ jobs:
           paths:
             - build/
 
-      ## save cache for this commit
-
   test:
     <<: *container_config
     steps:
       - *restore_repo
       - *restore_dependencies
       - run: yarn test
-
-  github_deployment_create: # add destroying of old deployment here
-    <<: *container_config
-    steps:
-      - run: mkdir -p /tmp/workspace/deployment && touch /tmp/workspace/deployment/info.json
-      - run:
-          name: Create pending deployment on github.
-          command: |
-            curl -H "Authorization: token $GITHUB_TOKEN" \
-                 -d '{"ref": "'"$CIRCLE_BRANCH"'", "required_contexts":[], "description": "Creating deployment." }' \
-                 https://api.github.com/repos/jcarroll2007/ci-playground/deployments \
-                 -o /tmp/workspace/deployment/info.json
-      - persist_to_workspace:
-          root: *workspace_root
-          paths:
-            - deployment/
-  # save the url from the response, then cache that in a file so it can be accessed later? then access it and use it to update the status when deploy is successful
 
   deploy:
     <<: *container_config
@@ -152,16 +133,6 @@ jobs:
 workflows:
   version: 2
 
-  # deploy:
-  #   jobs:
-  #     - checkout_code
-  #     - install_dependencies:
-  #         requires:
-  #           - checkout_code
-  #     - run_node_script:
-  #         requires:
-  #           - install_dependencies
-
   deploy:
     jobs:
       - checkout_code
@@ -176,13 +147,11 @@ workflows:
           requires:
             - install_dependencies
             - checkout_code
-      # - hold:
-      #     type: approval
-      #     requires:
-      #      - test
-      #      - build
+      - hold:
+          type: approval
+          requires:
+           - test
+           - build
       - deploy:
           requires:
-            # - hold
-            - test
-            - build
+            - hold
