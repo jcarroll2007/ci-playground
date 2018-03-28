@@ -139,7 +139,7 @@ jobs:
     <<: *container_config
     steps:
       - *restore_repo
-      - run: node ./.scripts/github/create_deployment.js
+      - run: node ./app/.scripts/github/create_deployment.js
 
 
 workflows:
