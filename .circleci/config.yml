@@ -90,7 +90,7 @@ jobs:
   github_deployment_create:
     <<: *container_config
     steps:
-      - run: mkdir /tmp/workspace/deployment && touch /tmp/workspace/deployment/info.json
+      - run: mkdir -p /tmp/workspace/deployment && touch /tmp/workspace/deployment/info.json
       - run:
           name: Create pending deployment on github.
           command: |
