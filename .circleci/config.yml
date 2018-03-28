@@ -147,6 +147,7 @@ workflows:
       - hold:
           type: approval
           requires:
+           - github_deployment_create
            - test
            - build
       - deploy:
