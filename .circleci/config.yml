@@ -136,8 +136,8 @@ jobs:
                 --token $GITHUB_TOKEN \
                 --deployment $deployment_id \
                 --state failure \
-                --target_url https://jcarroll-ci-playground.firebaseapp.com \
-                --description "Deployment was successful"
+                --target_url $CIRCLE_BUILD_URL \
+                --description "Deployment failed."
             fi
 
   run_node_script:
