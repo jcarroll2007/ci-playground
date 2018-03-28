@@ -9,6 +9,7 @@ args
   .option('description', 'The deployment status description.', 'Deployment status updated.')
 
 const options = args.parse(process.argv)
+console.log(options)
 
 if (!options.token) {
   throw new Error('The authorization token must be passed in.')
@@ -19,18 +20,18 @@ if (!options.deployment) {
 if (!options.state) {
   throw new Error('The state is required.')
 }
-if (!options.target_url) {
-  throw new Error('The target_url is required.')
+if (!options.targetUrl) {
+  throw new Error('The target is required.')
 }
 
-fetch(`https://api.github.com/repos/jcarroll2007/ci-playground/deployments/${deployment}`, {
+fetch(`https://api.github.com/repos/jcarroll2007/ci-playground/deployments/${options.deployment}/statuses`, {
   headers: {
     Authorization: `token ${options.token}`
   },
   method: 'POST',
   body: JSON.stringify({
     state: options.state,
-    target_url: options.target_url,
+    target_url: options.targetUrl,
     description: options.description
   })
 })

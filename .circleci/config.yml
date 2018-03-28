@@ -146,11 +146,11 @@ jobs:
             deployment_id=$( node ./.scripts/github/create_deployment.js -t $GITHUB_TOKEN -b $CIRCLE_BRANCH )
             echo $deployment_id
             node ./.scripts/github/update_deployment_status.js \
-              -t $GITHUB_TOKEN \
-              -deployment $deployment_id \
-              -state success \
-              -target_url https://jcarroll-ci-playground.firebaseapp.com \
-              -description Deployment was successful
+              --token $GITHUB_TOKEN \
+              --deployment $deployment_id \
+              --state success \
+              --target_url https://jcarroll-ci-playground.firebaseapp.com \
+              --description "Deployment was successful"
 
 workflows:
   version: 2
