@@ -78,8 +78,6 @@ jobs:
           paths:
             - build/
 
-      ## save cache for this commit
-
   test:
     <<: *container_config
     steps:
@@ -90,6 +88,8 @@ jobs:
   deploy:
     <<: *container_config
     steps:
+      # is restoring the repo necessary? I don't think so
+      # TODO: retore only firebase tools
       - *restore_repo
       - *restore_dependencies
       - *attach_workspace
@@ -100,7 +100,36 @@ jobs:
             mkdir -p ./build/
             mv /tmp/workspace/build/* ./build/
             ls build/
-      - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+      - run:
+          name: Deploy to firebase and update github deployment status
+          command: |
+            deployment_id=$( node ./.scripts/github/create_deployment.js \
+              -t $GITHUB_TOKEN \
+              -b $CIRCLE_BRANCH \
+              --owner $CIRCLE_PROJECT_USERNAME \
+              --repo $CIRCLE_PROJECT_REPONAME)
+            if ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN ;
+            then
+              node ./.scripts/github/update_deployment_status.js \
+                --token $GITHUB_TOKEN \
+                --deployment $deployment_id \
+                --state success \
+                --target_url https://jcarroll-ci-playground.firebaseapp.com \
+                --description "Deployment was successful" \
+                --owner $CIRCLE_PROJECT_USERNAME \
+                --repo $CIRCLE_PROJECT_REPONAME
+              exit 0
+            else
+              node ./.scripts/github/update_deployment_status.js \
+                --token $GITHUB_TOKEN \
+                --deployment $deployment_id \
+                --state failure \
+                --target_url $CIRCLE_BUILD_URL \
+                --description "Deployment failed." \
+                --owner $CIRCLE_PROJECT_USERNAME \
+                --repo $CIRCLE_PROJECT_REPONAME
+              exit 1
+            fi
 
 workflows:
   version: 2
